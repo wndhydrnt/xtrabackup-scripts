@@ -11,7 +11,8 @@ Usage:
 [--log-file=<log>] \
 [--out-file=<log>] \
 [--backup-threads=<threads>] \
-[--uncompressed-archives]
+[--uncompressed-archives] \
+[--service-name=<name>]
     pyxtrabackup-restore (-h | --help)
     pyxtrabackup --version
 
@@ -44,6 +45,8 @@ Options:
     --uncompressed-archives                     \
     Specify that the backup archives are not compressed. \
 Use this option if you did backup with --no-compress.
+    --service-name=<name>                      \
+    Name of the mysql service to stop/start [default: mysql].
 
 """
 from docopt import docopt
@@ -57,7 +60,8 @@ def main():
     restore_tool = RestorationTool(arguments['--log-file'],
                                    arguments['--out-file'],
                                    arguments['--data-dir'],
-                                   arguments['--uncompressed-archives'])
+                                   arguments['--uncompressed-archives'],
+                                   arguments['--service-name'])
     try:
         restore_tool.start_restoration(arguments['--base-archive'],
                                        arguments['--incremental-archive'],

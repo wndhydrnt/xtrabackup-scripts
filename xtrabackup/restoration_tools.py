@@ -8,13 +8,14 @@ import logging
 
 class RestorationTool:
 
-    def __init__(self, log_file, output_file, data_dir, uncompressed_archives):
+    def __init__(self, log_file, output_file, data_dir, uncompressed_archives, service_name):
         self.log_manager = log_manager.LogManager()
         self.data_dir = data_dir
         self.stop_watch = timer.Timer()
         self.setup_logging(log_file)
         self.command_executor = CommandExecutor(output_file)
         self.compressed_archives = not uncompressed_archives
+        self.service_name = service_name
 
     def setup_logging(self, log_file):
         self.logger = logging.getLogger(__name__)
@@ -27,7 +28,7 @@ class RestorationTool:
 
     def stop_service(self):
         try:
-            self.command_executor.exec_manage_service('mysql', 'stop')
+            self.command_executor.exec_manage_service(self.service_name, 'stop')
         except:
             self.logger.error(
                 'Unable to manage MySQL service.',
@@ -128,7 +129,7 @@ class RestorationTool:
 
     def start_service(self):
         try:
-            self.command_executor.exec_manage_service('mysql', 'start')
+            self.command_executor.exec_manage_service(self.service_name, 'start')
         except:
             self.logger.error(
                 'Unable to manage MySQL service.',
